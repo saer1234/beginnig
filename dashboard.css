@@ -1,0 +1,35 @@
+body{
+    background-color: #e6f2ec;
+}
+#side_nav{
+  background-color: #000;
+  min-width: 300px;
+  max-width: 300px;
+  transition: all 0.5s;
+}
+.content{
+  width: 100%;
+  min-height: 100vh;
+}
+.sidebar li.active{
+  background-color: #eee;
+  border-radius: 8px;
+}
+.sidebar li.active a,.sidebar li.active a:hover{
+  color:#000;
+}
+.sidebar li a{
+  color:white;
+}
+
+@media(max-width:767px){
+#side_nav{
+  margin-left:-300px;
+  position:fixed;
+  min-height: 100vh;
+  z-index: 1;
+}
+#side_nav.active-sideBar{
+  margin-left:0px;
+}
+}
