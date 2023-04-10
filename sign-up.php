@@ -4,7 +4,7 @@
 	<title>Sign Up</title>
     <link href="sign-up.css" rel="stylesheet"/>
 </head>
-<body>
+<body style="background-image: url('icon/login.jpg');background-repeat: no-repeat;background-size: cover;background-position: center;background-attachment: fixed;">
 	<h2>Sign Up</h2>
 	<form method="post" action="sign-up.php">
 		<label for="email">Email:</label>

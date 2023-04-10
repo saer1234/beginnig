@@ -1,7 +1,11 @@
 
 		body {
 			font-family: Arial, sans-serif;
-			background-color: #f1f1f1;
+			background-image: url('icon/login.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 		}
 		
 		h2 {

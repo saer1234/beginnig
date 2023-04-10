@@ -22,6 +22,12 @@ body{
   color:white;
 }
 
+
+i.trash-icon:hover {
+  color: #dd2f2f;
+  cursor:crosshair;
+}
+
 @media(max-width:767px){
 #side_nav{
   margin-left:-300px;
@@ -29,7 +35,7 @@ body{
   min-height: 100vh;
   z-index: 1;
 }
-#side_nav.active-sideBar{
+#side_nav .active-sideBar{
   margin-left:0px;
 }
 }
