@@ -317,12 +317,15 @@ font: italic 1.2em "Fira Sans", serif;
   margin-left:-15px;
 }
 .card {
+  position: absolute;
   background: white;
   padding: 60px;
   border-radius: 4px;
   box-shadow: 0 2px 3px #C8D0D8;
   display: inline-block;
-  margin: 0 auto;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
 }
 .outside-card{
    display: block;
@@ -335,4 +338,10 @@ font: italic 1.2em "Fira Sans", serif;
     overflow: auto;
     background-color: rgb(0,0,0,0.4);
     padding-top: 300px;
+}
+
+/*close button success/rejected*/
+.card a{
+    color:rgb(214, 18, 18);
+    background-color: #00ffd5;
 }

@@ -2,12 +2,66 @@
 <html lang="en">
 <head>
     <?php
+    session_start();
      require_once "connect.php";
-     session_start();
+     
      if(isset($_SESSION["loggedin"])&&$_SESSION["loggedin"]==true&&$_SESSION["status"]!="it"){
           header("location: dashboard_".$_SESSION['status'].".php");
      }else if($_SESSION["status"]==null){
        header("location: Login.php");
+     }
+    
+    
+     //start alert of remove
+     function alert($id,$conns){
+        $sql1="SELECT * FROM events WHERE ID=".$id;
+        $rrt=mysqli_query($conns,$sql1);
+     ?>
+     <div class="outside-card">
+     <?php
+    if(mysqli_num_rows($rrt)>0){ 
+        $sql1="DELETE FROM events WHERE ID=".$id;
+        $rrt=mysqli_query($conns,$sql1);
+     ?>
+     <div  class="card">
+     <div style="text-align:right;display:inline-block;float:right;">
+     <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><h3 style="display:inline-block;">x</h3></a>
+       </div>
+     <div style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+      <!-- <i class="checkmark">✓</i>-->
+      <img src="icon/true.jpg" style="border-radius:200px" width="200" height="200"/>
+     </div>
+       <h1 style="text-align:center;">Success</h1> 
+       <p>We received your query request;<br/>Event is removed!</p>
+     </div>
+     <?php
+    }else{
+     ?>
+
+     <div  class="card">
+     <div style="text-align:right;display:inline-block;float:right;">
+     <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><h3 style="display:inline-block;">x</h3></a>
+       </div>
+     <div style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+     <!--<i class="fad fa-times-circle fa-lg" style="--fa-secondary-color: #c00c0c;"></i>-->
+     <img src="icon/false.jpg" style="border-radius:200px" width="220" height="200"/>
+     </div>
+       <h1 style="text-align:center;">Rejected</h1> 
+       <p>We received your query request;<br/>you can't remove cause there already remove from another account please refresh page again to see new query</p>
+     </div>
+<?php
+    }
+    ?>
+    </div>
+    <?php
+}
+
+     //end
+
+
+
+     if(isset($_GET["remove_event"])&&isset($_GET["event_id"])&&$_GET["remove_event"]!=""&&$_GET["event_id"]!=0){
+        alert($_GET["event_id"],$conn);
      }
     ?>
     <meta charset="UTF-8">
@@ -79,25 +133,34 @@
 
   <div class="container text-center">
 <?php
-if(isset($_GET["setOnMain"])&&$_GET["setOnMain"]==true){
+if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
     extract($_GET);
     $sql ="SELECT * FROM events WHERE status_event='setOnMain'";
     $query= mysqli_query($conn,$sql);
    $number=mysqli_num_rows($query);
-
+   if($setOnMain=="false")
+    $number=3;
 ?>
     <!-- SET seccuss/rejecte -->
     
       <div class="outside-card">
     <?php
      if($number<4){
-        $sql="UPDATE events SET status_event ";
+         if($setOnMain=="true")
+        $sql="UPDATE events SET status_event='setOnMain' WHERE ID=".$_GET["id"];
+        else
+        $sql="UPDATE events SET status_event='notOnMain' WHERE ID=".$_GET["id"];
+        $result=mysqli_query($conn,$sql);
     ?>
       <div  class="card">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-        <i class="checkmark">✓</i>
+      <div style="text-align:right;display:inline-block;float:right;">
+      <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><h3 style="display:inline-block;">x</h3></a>
+        </div>
+      <div style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+       <!-- <i class="checkmark">✓</i>-->
+       <img src="icon/true.jpg" style="border-radius:200px" width="200" height="200"/>
       </div>
-        <h1>Success</h1> 
+        <h1 style="text-align:center;">Success</h1> 
         <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
       </div>
       <?php
@@ -105,10 +168,14 @@ if(isset($_GET["setOnMain"])&&$_GET["setOnMain"]==true){
       ?>
 
       <div  class="card">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-      <i class="fad fa-times-circle fa-lg" style="--fa-secondary-color: #c00c0c;"></i>
+      <div style="text-align:right;display:inline-block;float:right;">
+      <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><h3 style="display:inline-block;">x</h3></a>
+        </div>
+      <div style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+      <!--<i class="fad fa-times-circle fa-lg" style="--fa-secondary-color: #c00c0c;"></i>-->
+      <img src="icon/false.jpg" style="border-radius:200px" width="220" height="200"/>
       </div>
-        <h1>Rejected</h1> 
+        <h1 style="text-align:center;">Rejected</h1> 
         <p>We received your purchase request;<br/> you can't set event because there are fulled in main page!</p>
       </div>
     <?php
@@ -502,15 +569,37 @@ if(isset($_GET["setOnMain"])&&$_GET["setOnMain"]==true){
     </div>
     </div>
     </div>
+    <?php
+     $id=$return["ID"];
+    ?>
     <p class="text-start" style="padding: 0px 20px;font: italic small-caps bold 16px/2 cursive;color:white;">Event 1<br/><?php echo $return["description"];?></p>
     <div class="text-start list-button p-3">
     
-    <button class="button-85">Edit</button>
-    <button class="button-87">Remove</button><br/>
+    <button onclick="location.href='?Edit_event=<?php echo $id;?>'" class="button-85">Edit</button>
     <?php
+    if(isset($_GET["Edit_event"])){
+        require "Edit_event.php";
+    }
+    if(){
+        
+    }
     ?>
-    <button class="button-48" role="button"><span class="text">Set on main<span></button>
-
+     <button  onclick="location.href='?remove_event=remove&event_id=<?php echo $id;?>'" class="button-87">Remove</button><br/>
+  <?php
+    $sql ="SELECT * FROM events WHERE status_event='setOnMain' AND ID=".$id;
+    $rr=mysqli_query($conn,$sql);
+    if(mysqli_num_rows($rr)!=1)
+    {
+    ?>
+    <button class="button-48" onclick="location.href='?setOnMain=true&id=<?php echo $id;?>'"role="button"><span class="text">Set on main<span></button>
+    <?php
+    }else{
+    ?>
+     <button class="button-48" onclick="location.href='?setOnMain=false&id=<?php echo $id;?>'"role="button"><span class="text">Remove From main<span></button>
+   
+    <?php
+    }
+    ?>
     </div>
     </div>
 
