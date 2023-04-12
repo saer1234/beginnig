@@ -1,4 +1,11 @@
 <?php
+
+if(isset($_SESSION["loggedin"])&&$_SESSION["loggedin"]==true&&$_SESSION["status"]!="it"){
+    header("location: dashboard_".$_SESSION['status'].".php");
+}else if($_SESSION["status"]==null){
+ header("location: Login.php");
+}
+
 $sql2="SELECT * FROM events where ID=".$_GET['Edit_event'];
 $show_edit=mysqli_query($conn,$sql2);
 
@@ -12,7 +19,7 @@ if(mysqli_num_rows($show_edit)>0){
         <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><img src="icon/close_edit_event.jpg"></a>
 </div>
 <div class="main-edit">
-<form action="Event_<?php echo $_SESSION["status"]; ?>.php" method="GET" enctype="multipart/form-data">
+<form action="edit_form.php" method="POST" enctype="multipart/form-data">
 <h1>Edit Form:</h1>
 <input type="hidden" name="Edit_event" value="<?php echo $id;?>"/>
 <label>name:</label>
@@ -32,15 +39,19 @@ if(mysqli_num_rows($show_edit)>0){
 <input type="text" name="status_event" value="<?php echo $row_edit["status_event"];?>"/>
 <label>date:</label>
 <input type="date" name="date" value="<?php echo $row_edit["date"];?>"/>
-<input type="submit" value="Save"/>
+<input type="submit" value="Save" name="edit_submit"/>
 <input type="reset" value="clear"/>
 </form>
 </div>
 
 </div>
 <?php
+
+
+
+
 }else{
-alert($_GET["Edit_event"],$conn);
+alert($_GET["Edit_event"],$conn,"complete removed","this events was removed !");
 }
 
 ?>

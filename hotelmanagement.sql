@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2023 at 05:51 PM
+-- Generation Time: Apr 12, 2023 at 10:40 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -187,18 +187,17 @@ CREATE TABLE `events` (
   `number_user` int(11) DEFAULT NULL,
   `img` varchar(200) NOT NULL,
   `description` varchar(300) NOT NULL,
-  `status_event` varchar(60) NOT NULL
+  `status_event` varchar(60) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`ID`, `name`, `price_per_user`, `number_user`, `img`, `description`, `status_event`) VALUES
-(1, 'dsaf', 44677, 100, 'icon/event.jpg', 'ther alot of people like to drink vodka', 'setOnMain'),
-(2, 'sadf45678', 2357, 1000, 'icon/profile.png', 'the last event before starting Spring my friends', 'setOnMain'),
-(3, 'df23gfa', 2357, 1000, 'icon/profile.png', 'the last event before starting Spring my friends', 'setOnMain'),
-(4, 'naderisnoob', 2357, 1000, 'icon/profile.png', 'the last event before starting Spring my friends', 'notOnMain');
+INSERT INTO `events` (`ID`, `name`, `price_per_user`, `number_user`, `img`, `description`, `status_event`, `date`) VALUES
+(9, 'events 2', 100, 600, 'icon/p3.jpg', 'missing description', 'notOnMain', '2023-04-20'),
+(14, 'hommos', 32, 3214, 'icon/p1.jpg', '231  adsa a a fgas ', 'setOnMain', '2023-04-21');
 
 -- --------------------------------------------------------
 
@@ -237,7 +236,7 @@ CREATE TABLE `it` (
 --
 
 INSERT INTO `it` (`ID`, `username`, `password`, `phone`, `email`, `city`, `zipCode`, `address`, `status`, `img`) VALUES
-(1, 'it', '65517ef276cc627eebb0a309e1207995', '70309743', '51930540@students.liu.edu.lb', 'tripoli', 505, 'mina', 'online', 'icon/download.png');
+(1, 'it', '65517ef276cc627eebb0a309e1207995', '70309743', '51930540@students.liu.edu.lb', 'tripoli', 505, 'mina', 'offline', 'icon/download.png');
 
 -- --------------------------------------------------------
 
@@ -404,6 +403,13 @@ CREATE TABLE `message` (
   `messages` varchar(300) NOT NULL,
   `rate` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `message`
+--
+
+INSERT INTO `message` (`id`, `client_id`, `date`, `messages`, `rate`) VALUES
+(17, 1, '2023-04-11', 'some message coming for your customer please help as!', 2);
 
 -- --------------------------------------------------------
 
@@ -739,7 +745,7 @@ ALTER TABLE `add-rooms`
 -- AUTO_INCREMENT for table `allocate`
 --
 ALTER TABLE `allocate`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `client`
@@ -769,7 +775,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `garage`
@@ -841,7 +847,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `operate`

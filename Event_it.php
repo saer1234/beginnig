@@ -13,7 +13,7 @@
     
     
      //start alert of remove
-     function alert($id,$conns){
+     function alert($id,$conns,$content_true,$content_false){
         $sql1="SELECT * FROM events WHERE ID=".$id;
         $rrt=mysqli_query($conns,$sql1);
      ?>
@@ -32,7 +32,7 @@
       <img src="icon/true.jpg" style="border-radius:200px" width="200" height="200"/>
      </div>
        <h1 style="text-align:center;">Success</h1> 
-       <p>We received your query request;<br/>Event is removed!</p>
+       <p>We received your query request;<br/><?php echo $content_true;?></p>
      </div>
      <?php
     }else{
@@ -47,7 +47,7 @@
      <img src="icon/false.jpg" style="border-radius:200px" width="220" height="200"/>
      </div>
        <h1 style="text-align:center;">Rejected</h1> 
-       <p>We received your query request;<br/>you can't remove cause there already remove from another account please refresh page again to see new query</p>
+       <p>We received your query request;<br/><?php echo $content_false;?></p>
      </div>
 <?php
     }
@@ -61,7 +61,7 @@
 
 
      if(isset($_GET["remove_event"])&&isset($_GET["event_id"])&&$_GET["remove_event"]!=""&&$_GET["event_id"]!=0){
-        alert($_GET["event_id"],$conn);
+        alert($_GET["event_id"],$conn,"Done Event is removed","The query don't complete delete something wrong!");
      }
     ?>
     <meta charset="UTF-8">
@@ -192,8 +192,12 @@ if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
       <p style="font: italic small-caps bold 16px/2 cursive;color:#F8F6F1;"><img src="icon/event.jpg" class="border rounded-4 border-danger float-start" style="width:100px;height:100px;margin-right:10px;"/>
       <span class="text-wrap fw-blod" style="font-size:30px;color:white;">Events</span> are an important aspect of human social interaction and can take many forms, ranging from formal ceremonies to informal gatherings. Events are often organized around a common theme or purpose, such as celebrating a holiday, raising awareness for a cause, or networking with like-minded individuals. The success of an event often depends on careful planning and execution, including selecting a suitable venue, inviting appropriate guests, and providing engaging activities or presentations. Events can also have significant economic and cultural impact, attracting tourists, generating revenue for local businesses, and showcasing a community's traditions and values. Whether big or small, events provide opportunities for people to connect, learn, and celebrate together.
     </p>
-    <button type="button" class="btn btn-success" style="margin:10px;">Success</button>
-    <button type="button" class="btn btn-info">Info</button>
+    <?php
+    if(isset($_GET["add_event"])&&$_GET["add_event"]==1){
+      require_once "Add_event.php";
+    }
+    ?>
+    <button onclick="location.href='?add_event=1'" type="button" class="btn btn-success" style="margin:10px;">Add event</button>
     </div>
     <div class="col-xl text-start rounded-5 event-list" style="background-color:#CFB9A5;padding:15px;box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
      <!-- table -->
@@ -216,230 +220,27 @@ if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
   <div class="tbl-content">
     <table cellpadding="0" cellspacing="0" border="0">
       <tbody>
+        <?php
+        $sql= "SELECT * FROM events";
+        $rrr=mysqli_query($conn,$sql);
+        while($rowss=mysqli_fetch_assoc($rrr)){
+          $sql2= "SELECT * FROM client INNER JOIN allocate ON client.ID=allocate.client_id INNER JOIN events ON allocate.event_id=events.ID WHERE events.ID=".$rowss["ID"];
+          $r2=mysqli_query($conn,$sql2);
+           $number=0;
+           while($number_client=mysqli_fetch_assoc($r2)){
+            $number+=$number_client["Number_clients"];
+           }
+        ?>
         <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
+          <td><?php echo$rowss["ID"]; ?></td>
+          <td><?php echo$rowss["name"]; ?></td>
+          <td><?php echo$rowss["number_user"]; ?></td>
+          <td><?php echo $number; ?></td>
+          <td><?php echo$rowss["date"]; ?></td>
         </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
-        <tr>
-          <td>AAC</td>
-          <td>AUSTRALIAN COMPANY </td>
-          <td>$1.38</td>
-          <td>+2.01</td>
-          <td>-0.36%</td>
-        </tr>
-        <tr>
-          <td>AAD</td>
-          <td>AUSENCO</td>
-          <td>$2.38</td>
-          <td>-0.01</td>
-          <td>-1.36%</td>
-        </tr>
-        <tr>
-          <td>AAX</td>
-          <td>ADELAIDE</td>
-          <td>$3.22</td>
-          <td>+0.01</td>
-          <td>+1.36%</td>
-        </tr>
-        <tr>
-          <td>XXD</td>
-          <td>ADITYA BIRLA</td>
-          <td>$1.02</td>
-          <td>-1.01</td>
-          <td>+2.36%</td>
-        </tr>
+        <?php
+        }
+        ?>
       </tbody>
     </table>
   </div>
@@ -572,7 +373,7 @@ if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
     <?php
      $id=$return["ID"];
     ?>
-    <p class="text-start" style="padding: 0px 20px;font: italic small-caps bold 16px/2 cursive;color:white;">Event 1<br/><?php echo $return["description"];?></p>
+    <p class="text-start" style="padding: 0px 20px;font: italic small-caps bold 16px/2 cursive;color:white;"><?php echo $return["name"];?><br/><?php echo $return["description"];?></p>
     <div class="text-start list-button p-3">
     
     <button onclick="location.href='?Edit_event=<?php echo $id;?>'" class="button-85">Edit</button>
@@ -580,9 +381,7 @@ if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
     if(isset($_GET["Edit_event"])){
         require "Edit_event.php";
     }
-    if(){
-        
-    }
+    
     ?>
      <button  onclick="location.href='?remove_event=remove&event_id=<?php echo $id;?>'" class="button-87">Remove</button><br/>
   <?php
