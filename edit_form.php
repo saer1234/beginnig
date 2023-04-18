@@ -13,10 +13,13 @@ if (isset($_POST['edit_submit'])&&$_POST['edit_submit']=="Save") {
      $filename = $_FILES["img"]["name"];
      $tempname = $_FILES["img"]["tmp_name"];
      $folder = "icon/" . $filename;
-  
+      extract($_POST);
      // Get all the submitted data from the form
-     $sql = "UPDATE events SET img='icon/{$filename}' WHERE ID={$_POST['Edit_event']}";
-  
+     if($_FILES["img"]["name"]){
+     $sql = "UPDATE events SET img='icon/{$filename}',name='$name',number_user='$number_user',description='$description',date='$date' WHERE ID={$_POST['Edit_event']} ";
+     }else{
+        $sql = "UPDATE events SET name='$name',number_user='$number_user',description='$description',date='$date' WHERE ID={$_POST['Edit_event']} ";
+     }
      // Execute query
      mysqli_query($conn, $sql);
   

@@ -153,7 +153,7 @@ margin:0px;
   </div>
 </nav>
 <div class="dashboard-content">
-  <h2 class="fs-5">Dashboard</h2>
+  <h2 class="fs-5" id="s">Dashboard</h2>
   <p >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur dolorum aut consectetur deleniti! Cumque corrupti neque temporibus corporis ipsam porro asperiores aut, libero sapiente possimus? Mollitia vel nulla voluptate dolor!</p>
 
 </div>
@@ -171,7 +171,7 @@ margin:0px;
        $lenght_user=0;
        $total_user_online=0;
        $total_user_offline=0;
-       while($i!=3){
+      while($i!=3){
        $sql ="SELECT * FROM $array[$i]";
        $return = mysqli_query($conn,$sql);
        while($r1=mysqli_fetch_assoc($return)){
@@ -189,9 +189,10 @@ margin:0px;
        }
        $i++;
        }
-         ?>
-        <strong>Number of user:</strong> <span class="p-2 badge bg-primary rounded-pill"><?php echo $total_user_offline+$total_user_online;?></span><br>
-        <strong>Online Client:</strong> <span class="p-2 badge bg-primary rounded-pill"><?php echo $total_user_online;?></span><br>
+
+        ?>
+        <strong>Number of user:</strong> <span class="p-2 badge bg-primary rounded-pill NumberU"><?php echo $total_user_offline+$total_user_online;?></span><br>
+        <strong>Online Client:</strong> <span class="p-2 badge bg-primary rounded-pill NumberUO"><?php echo $total_user_online;?></span><br>
            <button onclick="threeButtonActive(this)" data-value="0" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
            Check users
           </button>
@@ -216,20 +217,20 @@ margin:0px;
           if($change_color){
           ?> 
            <tr class="table-light">
-             <td class="text-dark"><?php echo $content_users[$i]["id"]; ?></td>  
-             <td class="text-dark"><?php echo $content_users[$i]["type_user"];?></td> 
-             <td class="text-dark"><?php echo $content_users[$i]["name"]; ?></td> 
-             <td class="text-dark"><?php echo $content_users[$i]["status"]; ?></td>          
+             <td class="text-dark UserId"><?php echo $content_users[$i]["id"]; ?></td>  
+             <td class="text-dark UserType"><?php echo $content_users[$i]["type_user"];?></td> 
+             <td class="text-dark UserName"><?php echo $content_users[$i]["name"]; ?></td> 
+             <td class="text-dark UserStatus"><?php echo $content_users[$i]["status"]; ?></td>          
            </tr>
            <?php
           $change_color=false;
            }else{
            ?>
            <tr class="table-success">
-             <td class="text-dark"><?php echo $content_users[$i]["id"]; ?></td>   
-             <td class="text-dark"><?php echo $content_users[$i]["type_user"]; ?></td> 
-             <td class="text-dark"><?php echo $content_users[$i]["name"]; ?></td> 
-             <td class="text-dark"><?php echo $content_users[$i]["status"]; ?></td>          
+             <td class="text-dark UserId"><?php echo $content_users[$i]["id"]; ?></td>   
+             <td class="text-dark UserType"><?php echo $content_users[$i]["type_user"]; ?></td> 
+             <td class="text-dark UserName"><?php echo $content_users[$i]["name"]; ?></td> 
+             <td class="text-dark UserStatus"><?php echo $content_users[$i]["status"]; ?></td>          
            </tr>
           <?php
           $change_color=true;
@@ -552,7 +553,37 @@ x.style.display="none";
    }
 
   }
-  </script>
+  function updateTableUser(x,responseID,y,responseStatus,z,responsRule){
+    for(let xr=0;xr<x.length;xr++){
+    if(x[xr].innerHTML==responseID && y[xr].innerHTML!=responseStatus&&z[xr].innerHTML==responsRule){
+           y[xr].innerHTML=responseStatus;
+           break;
+    }
+    }
+  }
+
+  function updateContent() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementsByClassName("NumberUO")[0].innerHTML = this.responseText.split(',')[0].split('=')[1];
+       let cout=document.getElementsByClassName("UserId").length; 
+       // this.responseText.split("<br/>").length;
+        const list=this.responseText.split("<br/>");
+       for(let i=1;i<(cout+1);i++){
+        const t1=list[i].split("\\");
+        updateTableUser(document.getElementsByClassName("UserId"),t1[0],document.getElementsByClassName("UserStatus"),t1[3],document.getElementsByClassName("UserType"),t1[1]);
+       }
+      }
+    };
+    xhr.open("GET", "update.php", true);
+    xhr.send();
+  }
+
+  
+  // Call the updateContent function every 5 seconds
+  setInterval(updateContent, 5000);
+    </script>
 </body>
 
 </html>

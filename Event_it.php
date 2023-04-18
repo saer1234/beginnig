@@ -13,16 +13,18 @@
     
     
      //start alert of remove
-     function alert($id,$conns,$content_true,$content_false){
+     function alert($id,$conns,$content_true,$content_false,$disableDelete){
         $sql1="SELECT * FROM events WHERE ID=".$id;
         $rrt=mysqli_query($conns,$sql1);
      ?>
      <div class="outside-card">
      <?php
     if(mysqli_num_rows($rrt)>0){ 
+      if($disableDelete){
         $sql1="DELETE FROM events WHERE ID=".$id;
         $rrt=mysqli_query($conns,$sql1);
-     ?>
+      }
+      ?>
      <div  class="card">
      <div style="text-align:right;display:inline-block;float:right;">
      <a href="Event_<?php echo $_SESSION["status"]; ?>.php"><h3 style="display:inline-block;">x</h3></a>
@@ -61,7 +63,7 @@
 
 
      if(isset($_GET["remove_event"])&&isset($_GET["event_id"])&&$_GET["remove_event"]!=""&&$_GET["event_id"]!=0){
-        alert($_GET["event_id"],$conn,"Done Event is removed","The query don't complete delete something wrong!");
+        alert($_GET["event_id"],$conn,"Done Event is removed","The query don't complete delete something wrong!",true);
      }
     ?>
     <meta charset="UTF-8">
@@ -135,7 +137,7 @@
 <?php
 if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
     extract($_GET);
-    $sql ="SELECT * FROM events WHERE status_event='setOnMain'";
+    $sql ="SELECT * FROM events WHERE status_event!='notOnMain'";
     $query= mysqli_query($conn,$sql);
    $number=mysqli_num_rows($query);
    if($setOnMain=="false")
@@ -381,7 +383,9 @@ if(isset($_GET["setOnMain"])&&isset($_GET["id"])&&$_GET["id"]!=0){
     if(isset($_GET["Edit_event"])){
         require "Edit_event.php";
     }
-    
+    if(isset($_GET['id1'])){
+          alert($_GET['id1'],$conn,"done is installed","please choose another date",false);
+    }
     ?>
      <button  onclick="location.href='?remove_event=remove&event_id=<?php echo $id;?>'" class="button-87">Remove</button><br/>
   <?php

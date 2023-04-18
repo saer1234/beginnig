@@ -21,7 +21,7 @@ if(mysqli_num_rows($show_edit)>0){
 <div class="main-edit">
 <form action="edit_form.php" method="POST" enctype="multipart/form-data">
 <h1>Edit Form:</h1>
-<input type="hidden" name="Edit_event" value="<?php echo $id;?>"/>
+<input type="hidden" name="Edit_event" value="<?php echo $_GET['Edit_event'];?>"/>
 <label>name:</label>
 <input type="text" name="name" value="<?php echo $row_edit["name"];?>">
 <label>price for each user:</label>
